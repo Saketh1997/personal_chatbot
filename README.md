@@ -8,7 +8,7 @@
   1. Knowledge base — Plain-text documents in /data cover career goals, education, work experience, technical skills, research, homelab, and projects.                                               
   2. Embedding — chromadb_populate.py embeds each document using nomic-embed-text (via Ollama) and stores them in a persistent ChromaDB collection.
   3. Query — A POST request arrives with a question. The API embeds the question, queries ChromaDB for the top 3 most similar chunks (cosine distance < 1.5), and builds a context-aware prompt.     
-  4. Generation — The prompt is sent to qwen2.5:3b running locally via Ollama. The model responds in first person as Saketh, in 2–3 sentences.                                                       
+  4. Generation — The prompt is sent to qwen2.5:3b running locally via Ollama. The model responds in 2–3 sentences.                                                       
   5. Fallback — If no relevant chunks are found above the similarity threshold, the model answers from its own knowledge without injected context.                                                   
                                                                                                                                                                                                      
   Frontend (sakethmetta.org)                                                                                                                                                                         
@@ -46,19 +46,7 @@
   ├── requirements.txt
   ├── Dockerfile                                                                                                                                                                                     
   ├── chroma_db/              # Persistent ChromaDB storage (generated)
-  └── data/                   # Knowledge base (plain text)                                                                                                                                          
-      ├── career_goals.txt                                  
-      ├── current_projects.txt
-      ├── education.txt                                                                                                                                                                              
-      ├── homelab.txt
-      ├── integrated_portfolio_chatbot.txt                                                                                                                                                           
-      ├── postgresql_research.txt                           
-      ├── strengths.txt
-      ├── suitability_ml.txt
-      ├── suitability_robotics.txt                                                                                                                                                                   
-      ├── suitability_swe.txt
-      ├── technical_skills.txt                                                                                                                                                                       
-      └── work_experience.txt                               
+  └── data/                   # Knowledge base (plain text)                    
 
   ---                                                                                                                                                                                                
   Prerequisites
@@ -99,7 +87,6 @@
     -v $(pwd)/chroma_db:/app/database \
     --network host \                                                                                                                                                                                 
     personal-llm
-                                                                                                                                                                                                     
   ▎ --network host is required so the container can reach Ollama on localhost:11434. The ChromaDB volume mount persists the vector database across restarts.                                         
   
   ---                                                                                                                                                                                                
@@ -124,5 +111,5 @@
   ---                                                                                                                                                                                                
   Deployment (k3s)                                          
                   
-  Deployed as a Docker container on a 2-node k3s cluster. Ollama runs on the same node (MachineGun) so localhost:11434 resolves correctly via hostNetwork: true. Exposed publicly through Cloudflare
+  Deployed as a Docker container on a 2-node k3s cluster. Ollama runs on the same node so localhost:11434 resolves correctly via hostNetwork: true. Exposed publicly through Cloudflare
   Tunnel — no inbound ports opened on the home network.   
