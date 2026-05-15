@@ -1,0 +1,52 @@
+from fastapi import FastAPI
+import chromadb
+from pydantic import BaseModel
+import chromadb
+import requests
+from fastapi.middleware.cors import CORSMiddleware
+
+
+# POST http://localhost:11434/api/embeddings
+# {
+#   "model": "nomic-embed-text",
+#   "prompt": "text to embed"
+# }
+
+class QueryRequest(BaseModel):
+    question: str
+
+app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["https://sakethmetta.org"],
+    allow_methods=["POST"],
+    allow_headers=["Content-Type"],
+)
+client = chromadb.PersistentClient(path="/app/database")
+collection = client.get_or_create_collection("personal_website_chabot")
+response = ""
+api = 'http://localhost:11434/api/generate'
+
+@app.post("/response")
+def respond(queries: QueryRequest):
+    documents = []
+    document = collection.query(query_texts=[queries.question], n_results=3)
+    print(document)
+    for num, dist in enumerate(document["distances"][0]):
+        if(dist < 1.5):
+            documents.append(document["documents"][0][num])
+    if not documents:
+        model_query =   "Query: "+ queries.question
+        json_object = {"stream": False, "model": "qwen2.5:3b", 
+                        "prompt": model_query}
+        response = requests.post(api, json=json_object)
+        return response.json()["response"]
+
+    model_query =   "Query: "+ queries.question + "Information about Saketh: "+ "".join(documents)
+    json_object = {"stream": False, "model": "qwen2.5:3b", 
+                    "system": """You are Saketh and answering all the questions that a recruiter is asking in first person. 
+                    Be concise 2-3 sentences, thats it. Only use the information provided, never invent stuff. 
+                    If the question is a greeting or small talk, respond naturally without using the retrieved information.""",
+                    "prompt": model_query}
+    response = requests.post(api, json=json_object)
+    return response.json()["response"]
