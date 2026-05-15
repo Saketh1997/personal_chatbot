@@ -26,23 +26,16 @@
   ---
   Stack                                                                                                                                                                                              
                                                             
-  ┌──────────────────┬───────────────────────────┐
-  │    Component     │           Tool            │
-  ├──────────────────┼───────────────────────────┤
-  │ API framework    │ FastAPI + Uvicorn         │
-  ├──────────────────┼───────────────────────────┤
-  │ LLM inference    │ Ollama (qwen2.5:3b)       │                                                                                                                                                   
-  ├──────────────────┼───────────────────────────┤
-  │ Embeddings       │ Ollama (nomic-embed-text) │                                                                                                                                                   
-  ├──────────────────┼───────────────────────────┤                                                                                                                                                   
-  │ Vector database  │ ChromaDB (persistent)     │
-  ├──────────────────┼───────────────────────────┤                                                                                                                                                   
-  │ Containerization │ Docker                    │          
-  ├──────────────────┼───────────────────────────┤
-  │ Orchestration    │ k3s (Kubernetes)          │
-  ├──────────────────┼───────────────────────────┤
-  │ Public exposure  │ Cloudflare Tunnel         │
-  └──────────────────┴───────────────────────────┘
+  Component          Tool                                                                                                                                                                            
+  -----------------  -------------------------              
+  API framework      FastAPI + Uvicorn
+  LLM inference      Ollama (qwen2.5:3b)                                                                                                                                                             
+  Embeddings         Ollama (nomic-embed-text)
+  Vector database    ChromaDB (persistent)                                                                                                                                                           
+  Containerization   Docker                                 
+  Orchestration      k3s (Kubernetes)                                                                                                                                                                
+  Public exposure    Cloudflare Tunnel
+                                        
 
   ---
   Project Structure
