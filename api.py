@@ -40,7 +40,7 @@ def respond(queries: QueryRequest):
         if not documents:
             model_query =   "Query: "+ queries.question
             json_object = {"stream": False, "model": "hf.co/bartowski/google_gemma-3-4b-it-qat-GGUF:Q4_K_M",
-                            "prompt": model_query, "options": {"num_ctx": 32768}}
+                            "prompt": model_query, "options": {"num_ctx": 8192}}
             response = requests.post(api, json=json_object, timeout=120)
             data = response.json()
             return data.get("response", data.get("error", "No response from model."))
