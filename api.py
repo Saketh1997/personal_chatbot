@@ -38,7 +38,7 @@ def respond(queries: QueryRequest):
             if(dist < 1.5):
                 documents.append(document["documents"][0][num])
         if not documents:
-            model_query =   "Query: "+ queries.question
+            model_query =   queries.question
             json_object = {"stream": False, "model": "hf.co/bartowski/google_gemma-3-4b-it-qat-GGUF:Q4_K_M",
                             "prompt": model_query}
             response = requests.post(api, json=json_object, timeout=120)
