@@ -39,7 +39,7 @@ def respond(queries: QueryRequest):
         model_query =   "Query: "+ queries.question
         json_object = {"stream": False, "model": "hf.co/bartowski/google_gemma-3-4b-it-qat-GGUF:Q4_K_M", 
                         "prompt": model_query, "options": {"num_ctx": 32768}} 
-        response = requests.post(api, json=json_object)
+        response = requests.post(api, json=json_object, timeout=120)
         return response.json()["response"]
 
     model_query =   "Query: "+ queries.question + "Information about Saketh: "+ "".join(documents)
