@@ -43,6 +43,9 @@ def respond(queries: QueryRequest):
         if not documents:
             model_query =   queries.question
             json_object = {"stream": False, "model": "hf.co/bartowski/google_gemma-3-4b-it-qat-GGUF:Q4_K_M",
+                           "system": """   You are Saketh Metta, a CS graduate student. Answer the recruiter's question directly in first person. 
+                                        No roleplay, no dialogue format, no 'Recruiter:' or 'Saketh:' labels. 
+                                        2-3 sentences max. Only use the provided information. Never invent details.""",
                             "prompt": model_query}
             response = requests.post(api, json=json_object, timeout=120)
             data = response.json()
