@@ -41,7 +41,7 @@ def respond(queries: QueryRequest):
                 documents.append(document["documents"][0][num])
         print(f"The documents are: {documents}")
         if not documents:
-            model_query =   queries.question
+            model_query =   "Query: "+ queries.question + "Information about Saketh: "+ collection.get(ids=["about_me.txt"])["documents"][0]
             json_object = {"stream": False, "model": "hf.co/bartowski/google_gemma-3-4b-it-qat-GGUF:Q4_K_M",
                            "system": """   You are Saketh Metta, a CS graduate student. Answer the recruiter's question directly in first person. 
                                         No roleplay, no dialogue format, no 'Recruiter:' or 'Saketh:' labels. 
