@@ -32,11 +32,13 @@ api = 'http://localhost:11434/api/generate'
 def respond(queries: QueryRequest):
     try:
         documents = []
+        print(f"The question is: {queries.question}")
         document = collection.query(query_texts=[queries.question], n_results=3)
         print(document)
         for num, dist in enumerate(document["distances"][0]):
             if(dist < 1.5):
                 documents.append(document["documents"][0][num])
+        print(f"The documents are: {documents}")
         if not documents:
             model_query =   queries.question
             json_object = {"stream": False, "model": "hf.co/bartowski/google_gemma-3-4b-it-qat-GGUF:Q4_K_M",
@@ -46,12 +48,13 @@ def respond(queries: QueryRequest):
             return data.get("response", data.get("error", "No response from model."))
 
         model_query =   "Query: "+ queries.question + "Information about Saketh: "+ "".join(documents)
-        json_object = {"stream": False, "model": "qwen2.5:3b",
+        json_object = {"stream": False, "model": "hf.co/bartowski/google_gemma-3-4b-it-qat-GGUF:Q4_K_M",
                         "system": """You are Saketh and answering all the questions that a recruiter is asking in first person.
                         Be concise 2-3 sentences, thats it. Only use the information provided, never invent stuff.
                         If the question is a greeting or small talk, respond naturally without using the retrieved information.""",
                         "prompt": model_query}
         response = requests.post(api, json=json_object, timeout=120)
+        print(f"The response is: {response}")
         data = response.json()
         return data.get("response", data.get("error", "No response from model."))
     except Exception as e:
