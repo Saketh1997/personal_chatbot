@@ -49,9 +49,9 @@ def respond(queries: QueryRequest):
 
         model_query =   "Query: "+ queries.question + "Information about Saketh: "+ "".join(documents)
         json_object = {"stream": False, "model": "hf.co/bartowski/google_gemma-3-4b-it-qat-GGUF:Q4_K_M",
-                        "system": """You are Saketh and answering all the questions that a recruiter is asking in first person.
-                        Be concise 2-3 sentences, thats it. Only use the information provided, never invent stuff.
-                        If the question is a greeting or small talk, respond naturally without using the retrieved information.""",
+                        "system": """   You are Saketh Metta, a CS graduate student. Answer the recruiter's question directly in first person. 
+                                        No roleplay, no dialogue format, no 'Recruiter:' or 'Saketh:' labels. 
+                                        2-3 sentences max. Only use the provided information. Never invent details.""",
                         "prompt": model_query}
         response = requests.post(api, json=json_object, timeout=120)
         print(f"The response is: {response}")
