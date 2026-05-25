@@ -56,7 +56,8 @@ def respond(queries: QueryRequest):
             data = response.json()
             return data.get("response", data.get("error", "No response from model."))
 
-        model_query =   "Query: "+ queries.question + "Information about Saketh: "+ "".join(documents)
+        about_me = collection.get(ids=["about_me.txt"])["documents"][0]
+        model_query = "Query: " + queries.question + " Information about Saketh: " + about_me + " " + "".join(documents)
         json_object = {"stream": False, "model": "hf.co/bartowski/google_gemma-3-4b-it-qat-GGUF:Q4_K_M",
                         "system": """   You are Saketh Metta, a CS graduate student. Answer the recruiter's question directly in first person. 
                                         No roleplay, no dialogue format, no 'Recruiter:' or 'Saketh:' labels. 
