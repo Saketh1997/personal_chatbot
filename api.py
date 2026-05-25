@@ -5,7 +5,12 @@ from pydantic import BaseModel
 import chromadb
 import requests
 from fastapi.middleware.cors import CORSMiddleware
+from chromadb.utils.embedding_functions import OllamaEmbeddingFunction
 
+embedding_fn = OllamaEmbeddingFunction(
+    url="http://localhost:11434/api/embeddings",
+    model_name="nomic-embed-text"
+)
 
 # POST http://localhost:11434/api/embeddings
 # {
@@ -24,7 +29,7 @@ app.add_middleware(
     allow_headers=["Content-Type"],
 )
 client = chromadb.PersistentClient(path="/app/database")
-collection = client.get_or_create_collection("personal_website_chabot")
+collection = client.get_or_create_collection("personal_website_chabot", embedding_function=embedding_fn)
 print(f"Collection count on startup: {collection.count()}")
 response = ""
 api = 'http://localhost:11434/api/generate'
