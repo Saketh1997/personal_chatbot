@@ -25,6 +25,7 @@ app.add_middleware(
 )
 client = chromadb.PersistentClient(path="/app/database")
 collection = client.get_or_create_collection("personal_website_chabot")
+print(f"Collection count on startup: {collection.count()}")
 response = ""
 api = 'http://localhost:11434/api/generate'
 
