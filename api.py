@@ -43,7 +43,7 @@ def respond(queries: QueryRequest):
         document = collection.query(query_texts=[queries.question], n_results=3)
         print(document)
         for num, dist in enumerate(document["distances"][0]):
-            if(dist < 1.5):
+            if(dist < 0.35):
                 documents.append(document["documents"][0][num])
         print(f"The documents are: {documents}")
         if not documents:
