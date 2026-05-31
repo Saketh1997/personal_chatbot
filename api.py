@@ -49,9 +49,7 @@ def respond(queries: QueryRequest):
         if not documents:
             model_query =   "Query: "+ queries.question + "Information about Saketh: "+ collection.get(ids=["about_me.txt"])["documents"][0]
             json_object = {"stream": False, "model": model,
-                           "system": """  If the query is a greeting then greet back only. You are Saketh Metta, a CS graduate student. Answer the recruiter's question directly in first person. 
-                                        No roleplay, no dialogue format, no 'Recruiter:' or 'Saketh:' labels. 
-                                        2-3 sentences max. Only use the provided information. Never invent details. """,
+                           "system": """You are Saketh Metta, a CS graduate student. Answer the recruiter's question directly in first person. Only use the provided information. Never invent details. """,
                             "prompt": model_query}
             response = requests.post(api, json=json_object, timeout=120)
             data = response.json()
