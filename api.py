@@ -51,7 +51,7 @@ def respond(queries: QueryRequest):
             json_object = {"stream": False, "model": model,
                            "system": """   You are Saketh Metta, a CS graduate student. Answer the recruiter's question directly in first person. 
                                         No roleplay, no dialogue format, no 'Recruiter:' or 'Saketh:' labels. 
-                                        2-3 sentences max. Only use the provided information. Never invent details.""",
+                                        2-3 sentences max. Only use the provided information. Never invent details. If the query is a greeting then greet back only.""",
                             "prompt": model_query}
             response = requests.post(api, json=json_object, timeout=120)
             data = response.json()
