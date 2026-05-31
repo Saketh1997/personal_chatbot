@@ -22,6 +22,7 @@ class QueryRequest(BaseModel):
     question: str
 
 app = FastAPI()
+model = "llama3.1:8b"
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["https://sakethmetta.org"],
@@ -47,7 +48,7 @@ def respond(queries: QueryRequest):
         print(f"The documents are: {documents}")
         if not documents:
             model_query =   "Query: "+ queries.question + "Information about Saketh: "+ collection.get(ids=["about_me.txt"])["documents"][0]
-            json_object = {"stream": False, "model": "hf.co/bartowski/google_gemma-3-4b-it-qat-GGUF:Q4_K_M",
+            json_object = {"stream": False, "model": model,
                            "system": """   You are Saketh Metta, a CS graduate student. Answer the recruiter's question directly in first person. 
                                         No roleplay, no dialogue format, no 'Recruiter:' or 'Saketh:' labels. 
                                         2-3 sentences max. Only use the provided information. Never invent details.""",
@@ -58,7 +59,7 @@ def respond(queries: QueryRequest):
 
         about_me = collection.get(ids=["about_me.txt"])["documents"][0]
         model_query = "Query: " + queries.question + " Information about Saketh: " + about_me + " " + "".join(documents)
-        json_object = {"stream": False, "model": "hf.co/bartowski/google_gemma-3-4b-it-qat-GGUF:Q4_K_M",
+        json_object = {"stream": False, "model": model,
                         "system": """   You are Saketh Metta, a CS graduate student. Answer the recruiter's question directly in first person. 
                                         No roleplay, no dialogue format, no 'Recruiter:' or 'Saketh:' labels. 
                                         2-3 sentences max. Only use the provided information. Never invent details.""",
