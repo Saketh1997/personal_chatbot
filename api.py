@@ -49,8 +49,10 @@ def respond(queries: QueryRequest):
         if not documents:
             model_query =   "Query: "+ queries.question + "Information about Saketh: "+ collection.get(ids=["about_me.txt"])["documents"][0]
             json_object = {"stream": False, "model": model,
-                           "system": """You are Saketh Metta, a CS graduate student. Answer the recruiter's question directly in first person. Only use the provided information. Never invent details. """,
-                            "prompt": model_query}
+                        "system": """You are Saketh Metta, a CS graduate student. Answer in first person directly. 
+                            No preamble, no meta-commentary like 'here is my answer'. No roleplay labels. 
+                            Only use provided information. Never invent details.""",
+                        "prompt": model_query}
             response = requests.post(api, json=json_object, timeout=120)
             data = response.json()
             return data.get("response", data.get("error", "No response from model."))
